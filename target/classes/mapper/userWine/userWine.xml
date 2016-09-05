@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="UserWineDao.dao">
+	<select id="getUserWineList" parameterType="map"
+	resultType="com.mao.test.webdata.vo.UserWineListVo">
+	select h.id ,h.upload_time as addTime,
+	case h.`status` when 0 then 'waitDeal' else 'dealFinshed' end as state,
+		
+		w.wine_name_cn aswineName,u.loginname as userName ,
+		u.username as nickname,h.handle_user as admin
+		from app_userwine_handle h inner join app_userwine w on h.user_wine_id=w.wine_id 
+		INNER JOIN t_acl_userinfo u on h.user_id=u.userid
+		<where>
+			<if test="wineName!=null  and wineName!=''">
+				and w.wine_name_cn like #{wineName}
+			</if>
+			<if test="state!=null  and state!=''">
+				and h.`status`=#{state}
+			</if>
+			<if test="phone!=null  and phone!=''">
+				and u.loginname like #{phone}
+			</if>
+			<if test="nickName!=null  and nickName!=''">
+				and u.username like #{nickName}
+			</if>
+		</where>
+		order by h.upload_time desc
+		limit #{offset},#{size}
+	</select>
+	<select id="countUserWine" parameterType="map" resultType="long">
+		select count(*)
+		from app_userwine_handle h inner join app_userwine w on
+		h.user_wine_id=w.wine_id INNER JOIN t_acl_userinfo u on
+		h.user_id=u.userid
+		<where>
+			<if test="wineName!=null and wineName!=''">
+				and w.wine_name_cn like #{wineName}
+			</if>
+			<if test="state!=null and state!=''">
+				and h.`status`=#{state}
+			</if>
+			<if test="phone!=null and phone!=''">
+				and u.loginname like #{phone}
+			</if>
+			<if test="nickName!=null and nickName!=''">
+				and u.username like #{nickName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getUserWineDetail" parameterType="int" resultType="com.mao.test.webdata.vo.UserWineDetailVo">
+		select h.id ,h.upload_time as addTime,
+		case h.`status` when
+		0 then 'waitDeal' else 'dealFinshed' end as state,
+		w.wine_name_cn as
+		wineName,h.handle_user,u.loginname as userName ,u.username as
+		nickname,h.user_wine_id as userWineId,
+		h.official_wine_id as officialWineId ,w.comment_cn as remark, h.handle_user as admin
+		from app_userwine_handle h inner join app_userwine w on
+		h.user_wine_id=w.wine_id INNER JOIN t_acl_userinfo u on
+		h.user_id=u.userid where h.id=#{id}
+	</select>
+	<select id="getWinePicture" parameterType="String" resultType="String">
+		select img_url from app_userwinepicture where wine_id=#{userWineId}
+	</select>
+	
+</mapper>

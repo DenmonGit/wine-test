@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="CabTempleteDao.dao">
+	<select id="getListCabTemplete" parameterType="map" resultType="com.mao.test.webdatav1.vo.CabTempleteVo">
+		select templete_id as templeteId,cab_name as cabName from app_cab_templete
+		order by add_time desc limit #{offset},#{size}
+	</select>
+	<select id="countCabTemplete" resultType="long">
+		select count(*) from app_cab_templete
+	</select>
+	<insert id="insertCabTemplete" parameterType="com.mao.test.webdatav1.vo.CabTempleteVo">
+		insert into 
+		app_cab_templete(templete_id,cab_name,cab_row,cab_column,
+		add_time,total_use,`status`,image,update_time,background)
+		values(#{templeteId},#{cabName},#{cabRow},#{cabColumn},
+		#{addTime},#{totalUse},#{status},#{image},#{updateTime},#{background})
+	</insert>
+	<delete id="deleteCab" parameterType="String">
+		delete from app_cab_templete where templete_id=#{templeteId}
+	</delete>
+	<select id="getCabTempleteById" parameterType="String" resultType="com.mao.test.webdatav1.vo.CabTempleteVo">
+		select cab_name as cabName,templete_id as templeteId
+		,cab_row as cabRow,
+		cab_column as cabColumn,image from app_cab_templete
+		where templete_id=#{templeteId}	</select>
+	
+	<update id="updateCabTemplete" parameterType="com.mao.test.webdatav1.vo.CabTempleteVo">
+			update
+		app_cab_templete set
+		cab_name=#{cabName},cab_row=#{cabRow},cab_column=#{cabColumn},
+		image=#{image},update_time=#{updateTime} where
+		templete_id=#{templeteId}
+	</update>
+</mapper>

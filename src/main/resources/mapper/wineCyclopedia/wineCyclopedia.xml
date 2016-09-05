@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="WineCyclopediaDao.dao">
+
+	<select id="getWineDataGrid" parameterType="map" resultType="com.mao.test.webdata.vo.WineCyclopediaVo">
+		select article_id as id,title as title,ordernumber as orderNumber,`status`
+		from app_article
+		<where>
+			<if test="title!=null and title!=''">
+				and title like concat('%',#{title},'%')			
+			</if>
+			<if test="type_id!=null">
+				and type_id=#{type_id}
+			</if>
+		</where>
+		order by orderNumber asc,update_time desc
+		limit #{offset},#{size}
+	</select>
+	<select id="countWineCyclopedia" parameterType="map" resultType="long">
+		select count(*) from app_article
+		<where>
+			<if test="title!=null and title!=''">
+				and title like concat('%',#{title},'%')			
+			</if>
+			<if test="type_id!=null">
+				and type_id=#{type_id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getWineTypeByIdAndName" resultType="com.mao.test.webdata.vo.WineTypeVo">
+		select article_type_id as id , type_name as name from app_article_type
+	</select>
+	
+	<insert id="addWine" parameterType="com.mao.test.webdata.vo.WineCyclopediaVo">
+		insert into app_article
+		(article_id,title,content,type_id,add_time,update_time,author_id,cover,`status`,ordernumber,operatetype,outside_url)
+		values(#{id},#{title},#{content},#{typeId},#{addTime},#{updateTime},#{authorId},#{cover},#{status},#{orderNumber},#{operateType},#{outsideUrl})
+	</insert>
+	
+	<delete id="deleteWine" parameterType="String">
+		delete from app_article where article_id=#{id}
+	</delete>
+	<select id="getWineById" parameterType="String" resultType="com.mao.test.webdata.vo.WineCyclopediaVo">
+		select * from app_article where article_id=#{id}
+	</select>
+	<update id="updateWine" parameterType="com.mao.test.webdata.vo.WineCyclopediaVo">
+		update app_article set
+		title=#{title},content=#{content},type_id=#{typeId},cover=#{cover},status=#{status},ordernumber=#{orderNumber},operatetype=#{operateType},outside_url=#{outsideUrl},update_time=#{updateTime}
+		where article_id=#{id}
+	</update>
+	<delete id="deleteWineByType" parameterType="Integer">
+	    delete from app_article where type_id=#{id}
+	</delete>
+</mapper>

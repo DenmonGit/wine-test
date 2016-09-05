@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="AdminUserDao.dao">
+
+	<select id="getVersionInfo" resultType="String">
+		select param_value from app_set_param where param_type=2 limit 1
+	</select>
+	
+	<select id="adminLogin" resultType="com.mao.test.webdata.vo.AdminUserInfoVo" parameterType="map">
+	 	select id,nick_name as nickName,login_name as
+		loginName,role_id as roleId from web_admin_user
+		where login_name=#{loginName} and password=#{password} and state=1
+	</select>
+	
+	<select id="getModulByParentId" resultType="com.mao.test.webdata.vo.ModulVo"
+	parameterType="int">
+		select id,modul_name as modulName,url as url from web_modul 
+		where parent_id=#{parentId} order by `index` asc 
+	</select>
+	
+	<select id="getModulByParentAndRoleId" resultType="com.mao.test.webdata.vo.AdminUserInfoVo"
+	parameterType="map">
+		select m.id,m.modul_name as modulName,m.url as url from web_modul m inner join
+		web_role_modul r on m.id=r.modul_id
+		where m.parent_id=#{parentId} and r.role_id=#{roleId} order by `index` asc
+	</select>
+	
+	<select id="getPassword" resultType="String" >
+		select password from web_admin_user where id=#{id}
+	</select>
+	
+	<update id="updatePassword" parameterType="map">
+		update web_admin_user
+		set password=#{password}
+		where id=#{id}
+	</update>
+	
+	<select id="getModulTreeByParentId" resultType="com.mao.test.webdata.vo.EasyTreeVo"
+	 parameterType="int">
+		select id,modul_name as text from web_modul
+		where parent_id=#{parentId} order by `index` asc 
+	</select>
+	
+	<delete id="deleteModul" parameterType="int">
+		delete from web_modul where id=#{id}
+	</delete>
+	
+	<update id="updateModul" parameterType="map">
+		update web_modul
+		set modul_name=#{modulName},url=#{url},`index`=#{index}
+		where id=#{id}
+	</update>
+	<select id="getModulById" parameterType="int" resultType="com.mao.test.webdata.vo.ModulVo">
+		select id,modul_name as modulName,url as url,`type`,`index`
+		from web_modul 
+		where id=#{id} 
+	</select>
+	<insert id="insertModul" parameterType="map">
+		insert into web_modul(url,modul_name,`index`,`type`,parent_id) 
+		values(#{url},#{modulName},#{index},#{type},#{parentId})
+	</insert>
+	
+	<select id="getRoleList" resultType="com.mao.test.webdata.vo.RoleVo">
+		select id as roleId,role_name as roleName
+		from web_role
+	</select>
+	
+	<select id="getRoleCheckedModul" resultType="com.mao.test.webdata.vo.EasyTreeVo" parameterType="map">
+		select m.id, m.modul_name as text,case r.role_id when
+		#{roleId} then true else false end as checked from web_modul m LEFT
+		JOIN web_role_modul r on m.id=r.modul_id and r.role_id=#{roleId}
+		where m.parent_id=#{parentId} order by m.`index` asc
+	</select>
+	
+	<delete id="roleDelete" parameterType="int">
+		delete from web_role where id=#{roleId}
+	</delete>
+	<delete id="deleteRoleModul" parameterType="int">
+		delete from web_role_modul where role_id=#{roleId}
+	</delete>
+	
+	<insert id="insertRole" parameterType="com.mao.test.webdata.vo.RoleVo" useGeneratedKeys="true" keyProperty="roleId">
+		insert into web_role(role_name,create_time) values(#{roleName},now())
+	</insert>
+	<update id="updateRoleName" parameterType="com.mao.test.webdata.vo.RoleVo" >
+		update web_role set role_name=#{roleName} where id=#{roleId} 
+	</update>
+	<insert id="insertRoleModul" parameterType="map">
+		insert into web_role_modul(role_id,modul_id) values(#{roleId},#{modulId})
+	</insert>
+	
+	<select id="getAdminUserList" parameterType="map" resultType="com.mao.test.webdata.vo.AdminUserInfoVo">
+		select a.id as id,a.login_name as loginName,a.nick_name as nickName,
+		a.role_id as roleId,r.role_name as roleName,a.state as state
+		from web_admin_user a inner join web_role r on a.role_id=r.id
+		<where>
+			<if test="loginName!=null">
+				and a.login_name like #{loginName}
+			</if>
+			<if test="roleId!=null">
+				and a.role_id=#{roleId}
+			</if>
+		 </where>
+		 order by a.create_time desc limit #{offset},#{size}
+	</select>
+	<select id="countAdminUserList" resultType="long"> 
+		select count(*) from web_admin_user
+	</select>
+	
+	<select id="getRoleIdAndName" resultType="com.mao.test.webdata.vo.AdminUserInfoVo">
+		select id as roleId,role_name as roleName from web_role
+	</select>
+	
+	<select id="getAdminUserInfoById" resultType="com.mao.test.webdata.vo.AdminUserInfoVo">
+		select login_name as loginName,nick_name as nickName,role_id as roleId,state
+		from web_admin_user where id=#{id}
+	</select>
+	<select id="updateState" parameterType="map">
+		update web_admin_user set state=#{state} where id=#{id}
+	</select>
+	
+	<select id="getAdminByName" parameterType="String" resultType="String">
+		select login_name as loginName from web_admin_user where login_name=#{loginName} 
+	</select>
+	
+	<insert id="insertAdmin" parameterType="map" >
+		insert into web_admin_user(login_name,password,nick_name,create_time,role_id,state)
+		values(#{loginName},#{password},#{nickName},#{createTime},#{roleId},#{state})
+	</insert>
+
+
+</mapper>

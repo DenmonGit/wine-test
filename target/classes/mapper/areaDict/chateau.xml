@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ChateauDao.dao">
+    
+    <select id="getChateauList" parameterType="map" resultType="com.mao.test.webdatav1.vo.ChateauVo">
+		select a.code as id,a.name_cn as name_cn,a.name_en as name_en,a.outSideUrl as outSideUrl,
+		a.aliases as aliases,a.number as number,a.area_code,
+		b.name_cn as area_name_cn
+		from chateau_dict a left join area_dict b on a.area_code=b.code
+        <where>
+            <if test="name_cn!=null">
+                and a.name_cn like #{name_cn}
+            </if>
+            <if test="code!=null">
+                and a.code like #{code}
+            </if>
+        </where>
+ 	 	order by a.update_time desc
+ 	 	limit #{offset},#{size}     
+    </select>
+    <select id="countChateauList" parameterType="map" resultType="long">
+        select count(*) 
+        from chateau_dict a left join area_dict b on a.area_code=b.code
+         <where>
+            <if test="name_cn!=null">
+                and a.name_cn like #{name_cn}
+            </if>
+            <if test="code!=null">
+                and a.code like #{code}
+            </if>
+        </where>
+    </select>
+    <select id="getMaxChateauCode" parameterType="String" resultType="String">
+		SELECT MAX(`code`) MaxCode FROM chateau_dict WHERE
+		area_code =#{areaCode} 
+    </select>
+    <select id="checkChateauIsExist" parameterType="String" resultType="int">
+		select count(*) from chateau_dict where code=#{chateaucode} 
+		       
+    </select>
+    
+  	<insert id="addChateauDict" parameterType="map">
+  	    insert into chateau_dict(`code`,name_cn,name_en,aliases,
+  	    area_code,number,outSideUrl,name_pinyin,add_time,update_time) values(
+  	    #{code},#{nameCn},#{nameEn},#{aliases},#{areaCode},#{number},#{outSideUrl},
+  	    #{namePinYin},#{addTime},#{updateTime})
+  	</insert>
+  	<update id="updateAddChateauDictArea" parameterType="map">
+  	    update chateau_dict set
+  	    area_1=#{area1},area_2=#{area2},area_3=#{area3},area_4=#{area4},area_5=#{area5},
+  	    parents_str_cn=#{parentsStrCn},parents_str_en=#{parentsStrEn} where `code`=#{code}
+  	    
+  	</update>
+  	<update id="updateChateauDict" parameterType="map">
+  	    update chateau_dict set
+  	    name_cn=#{nameCn},name_en=#{nameEn},aliases=#{aliases},
+  	    area_code=#{areaCode},number=#{number},outSideUrl=#{outSideUrl},
+  	    update_time=#{updateTime},name_pinyin=#{namePinyin}
+  	    where `code`=#{code}
+  	</update>
+  	<select id="getChateauBycode" parameterType="String" resultType="com.mao.test.webdatav1.vo.ChateauVo">
+  	    select *
+  	    from chateau_dict
+  	    where	`code`=#{code}
+  	</select>
+  	<delete id="deleteChateau" parameterType="String">
+  	    delete
+  	    from chateau_dict
+  	    where `code`=#{code}
+  	    
+  	</delete>
+</mapper>

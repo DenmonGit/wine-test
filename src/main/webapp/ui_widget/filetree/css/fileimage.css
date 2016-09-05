@@ -1,0 +1,33 @@
+.Div_Directory {
+	float: left;
+	margin: 2px;
+}
+
+.Div_File {
+	float: right;
+	margin: 2px;
+}
+
+.Div_Left {
+	width: 320px;
+	height: 430px;
+	border-top: solid 1px #BBB;
+	border-left: solid 1px #BBB;
+	border-bottom: solid 1px #FFF;
+	border-right: solid 1px #FFF;
+	background: #FFF;
+	overflow: auto;
+	padding: 5px;
+}
+
+.Div_Right {
+	width: 300px;
+	height: 430px;
+	border-top: solid 1px #BBB;
+	border-left: solid 1px #BBB;
+	border-bottom: solid 1px #FFF;
+	border-right: solid 1px #FFF;
+	background: #FFF;
+	overflow: auto;
+	padding: 5px;
+}

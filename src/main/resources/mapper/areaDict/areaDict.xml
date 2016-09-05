@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="AreaDict.dao">
+	<select id="getAreaDictByCode" resultType="com.mao.test.webdata.vo.AreaDictVo"
+		parameterType="String">
+		SELECT name_cn `name`,name_en `name_en`,
+		`code` id,number
+		number,`level`,
+		parent_code _parentId ,number,update_time,outsideurl outSideUrl,aliases FROM
+		area_dict WHERE parent_code =#{code}
+		ORDER BY number ASC ,update_time DESC
+	</select>
+	<select id="countAreaDictByCode" parameterType="String" resultType="long" >
+		select count(*) from area_dict where parent_code=#{code}
+	</select>
+	<select id="getAreaDict" parameterType="String" resultType="com.mao.test.webdata.vo.AreaDictVo">
+	    select area_1,area_2,area_3,area_4,area_5,parents_str_cn,parents_str_en 
+	    from area_dict
+	    where `code`=#{areaCode} 
+	</select>
+</mapper>
