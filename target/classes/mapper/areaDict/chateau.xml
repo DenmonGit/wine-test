@@ -67,6 +67,14 @@
   	    delete
   	    from chateau_dict
   	    where `code`=#{code}
-  	    
   	</delete>
+  	<select id="getChateauByAreaCode" parameterType="String" resultType="com.mao.test.webdata.vo.EasyUiComboBoxVo">
+  	    select `code` id,name_cn text from chateau_dict
+  	    where `area_code`=#{areaCode}
+  	</select>
+  	<select id="getParentStrByCode" parameterType="String" resultType="com.mao.test.webdatav1.vo.ChateauParentNameVo">
+  	    select parents_str_cn parentsStrCn,parents_str_en parentsStrCn
+  	    from chateau_dict
+  	    where `code`=#{chateauCode}
+  	</select>
 </mapper>

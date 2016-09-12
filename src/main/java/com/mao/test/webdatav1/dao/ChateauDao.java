@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.mao.test.webdata.vo.EasyUiComboBoxVo;
+import com.mao.test.webdatav1.vo.ChateauParentNameVo;
 import com.mao.test.webdatav1.vo.ChateauVo;
 
 @Repository("chateauDao")
@@ -55,6 +57,14 @@ public class ChateauDao {
 
 	public void deleteChateau(String code) {
 		sqlSession.delete(NAMESPACE+"deleteChateau", code);
+	}
+
+	public List<EasyUiComboBoxVo<String>> getChateauByAreaCode(String areaCode) {
+		return sqlSession.selectList(NAMESPACE+"getChateauByAreaCode", areaCode);
+	}
+
+	public ChateauParentNameVo getParentStrByCode(String chateauCode) {
+		return sqlSession.selectOne(NAMESPACE+"getParentStrByCode", chateauCode);
 	}
 
 }

@@ -107,6 +107,7 @@ $(document).keydown(function(event){
 
 						<div>
 							<a class="btn btn-info" id="submit">登录</a>
+							<a href="<%=basePath%>jf/Thrid_login.jsp" class="btn btn-info_third" >第三方登录</a>
 						</div>
 
 					</form>

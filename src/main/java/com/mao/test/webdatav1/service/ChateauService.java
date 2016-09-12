@@ -2,6 +2,7 @@ package com.mao.test.webdatav1.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.mao.test.util.StringTookKit;
 import com.mao.test.webdata.constants.ErrorCodeConstants;
 import com.mao.test.webdata.dao.AreaDictDao;
 import com.mao.test.webdata.vo.AreaDictVo;
+import com.mao.test.webdata.vo.EasyUiComboBoxVo;
 import com.mao.test.webdata.vo.EasyUiDataGrideVo;
 import com.mao.test.webdata.vo.ResultVo;
 import com.mao.test.webdatav1.dao.BrandDao;
@@ -136,6 +138,10 @@ public class ChateauService {
 		return resultVo;
 		
 		
+	}
+
+	public List<EasyUiComboBoxVo<String>> getChateauByAreaCode(String areaCode) {
+		return chateauDao.getChateauByAreaCode(areaCode);
 	}
 	
 	

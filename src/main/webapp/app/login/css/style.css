@@ -38,7 +38,15 @@ body {
 	border-radius: 15px;
 	-webkit-border-radius: 15px;
 }
-
+.inner#formLogin{
+	width: 100%;
+	text-align: center;
+	margin: auto;
+	height: 175px;
+	padding: 90px 0px 20px 0px;
+	border-radius: 15px;
+	-webkit-border-radius: 15px;
+}
 #login .inner {
 	background-color: #FFF;
 	border: 1px #cccccc solid;
@@ -46,6 +54,26 @@ body {
 	overflow: hidden;
 	border-radius: 10px;
 	-webkit-border-radius: 10px;
+}
+.inner{
+	background-color: #FFF;
+	border: 1px #cccccc solid;
+	min-height: 230px;
+	overflow: hidden;
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+.inner.logo{
+	width: 500px;
+	height: 51px;
+	margin: 20px auto;
+	text-align: center;
+	position: absolute;
+	top: 5%;
+	left: 25%;
+	margin-left: -95px;
+	z-index: 11;
+	background-color: #FFF;
 }
 
 #login .logo {
@@ -134,7 +162,7 @@ input[type=text], input[type=password] {
 
 .btn {
 	TEXT-DECORATION: none;
-	width: 50px;
+	width: 100px;
 	display: inline-block;
 	padding: 6px 12px;
 	margin-bottom: 0;
@@ -172,6 +200,11 @@ input[type=text], input[type=password] {
 	color: #ffffff;
 	background-color: #5bc0de;
 	border-color: #46b8da;
+}
+.btn-info_third{
+	color:'#00FFFF';
+	background-color:#5bc0de;
+	border-color:#46b8da;
 }
 
 .btn-sm {

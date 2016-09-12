@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="brandDao.dao">
+    <select id="getBrandList" parameterType="map" resultType="com.mao.test.webdatav1.vo.BrandListVo">
+        select c.`code` id,c.name_cn,c.name_en,c.number,c.aliases,c.outSideUrl,
+        d.chateau_code,d.chateau_name_cn,d.area_code,d.area_name_cn
+        from brand_dict c left join
+        (SELECT a.`code` chateau_code, a.name_cn chateau_name_cn,a.area_code area_code,
+		b.name_cn area_name_cn
+		FROM chateau_dict a LEFT JOIN area_dict b ON a.area_code = b.code ) d
+		ON c.chateau_code = d.chateau_code WHERE 1=1	
+		<if test="nameCn!=null">
+		    and c.name_cn like #{nameCn}
+		</if>
+		<if test="code!=null">
+		    and c.code like #{code}
+		</if>
+		order by c.number asc,c.update_time desc
+		limit #{offset},#{size}
+    </select>
+    <select id="countBrandList" resultType="long" parameterType="map">
+        SELECT count(*) FROM brand_dict c
+		LEFT JOIN
+		(SELECT a.`code` chateau_code, a.name_cn chateau_name_cn,a.area_code
+		area_code,b.name_cn area_name_cn
+		FROM chateau_dict a LEFT JOIN area_dict b ON a.area_code = b.code ) d
+		ON c.chateau_code = d.chateau_code WHERE 1=1
+		<if test="nameCn!=null">
+			AND c.name_cn LIKE #{nameCn}
+		</if>
+		<if test="code!=null">
+			AND c.code LIKE #{code}
+		</if>
+    </select>
+    <select id="getMaxBrandCode" resultType="String" parameterType="String">
+		SELECT MAX(`code`) MaxCode FROM brand_dict WHERE chateau_code =
+		#{chateauCode}
+	</select>
+    <select id="checkBrandIsExist" parameterType="String" resultType="int">
+        select count(*)
+        from brand_dict
+        where code=#{brandCode}
+    </select>
+    <update id="updateBrandDictParentName" parameterType="map">
+        update brand_dict
+        set parents_str_cn=#{parentsStrCn},parents_str_en=#{parentsStrEn}
+        where `code`=#{code}
+    </update>
+    <insert id="addBrandDict" parameterType="map">
+        insert into brand_dict(`code`,name_cn,name_en,chateau_code,aliases,number,outSideUrl,add_time,update_time,name_pinyin)
+        values(#{code},#{nameCn},#{nameEn},#{chateauCode},#{aliases},#{number},#{outSideUrl},#{addTime},#{updateTime},#{namePinyin})
+    </insert>
+    <update id="updateBrandDict" parameterType="map">
+        update brand_dict
+        set name_cn=#{nameCn},name_en=#{nameEn},chateau_code=#{chateauCode},aliases=#{aliases},number=#{number},
+        update_time=#{updateTime},outSideUrl=#{outSideUrl},name_pinyin=#{namePinyin} where `code`=#{brandcode}
+    </update>
+    <delete id="deleteBrandDict" parameterType="String">
+        delete from brand_dict where `code`=#{id}
+    </delete>
+</mapper> 

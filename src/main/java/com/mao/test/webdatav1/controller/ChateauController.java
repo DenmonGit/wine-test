@@ -1,5 +1,6 @@
 package com.mao.test.webdatav1.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mao.test.webdata.vo.EasyUiComboBoxVo;
 import com.mao.test.webdata.vo.EasyUiDataGrideVo;
 import com.mao.test.webdata.vo.ResultVo;
 import com.mao.test.webdatav1.service.ChateauService;
@@ -72,6 +74,13 @@ public class ChateauController {
 		return chateauService.deleteChateauDict(id);
 		
 		}
+	@RequestMapping("/getChateauByAreaCode")
+	public @ResponseBody List<EasyUiComboBoxVo<String>> getChateauByAreaCode(
+			@RequestParam(required=true)String area_code){
+		LOG.info("访问getChateauByAreaCode，area_code:"+area_code);
+				return chateauService.getChateauByAreaCode(area_code);
+		
+	}
 
 	
 }
